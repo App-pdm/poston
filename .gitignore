@@ -22,7 +22,10 @@
 
 # Flutter/Dart/Pub related
 **/doc/api/
+<<<<<<< HEAD
 **/ios/Flutter/.last_build_id
+=======
+>>>>>>> develop
 .dart_tool/
 .flutter-plugins
 .flutter-plugins-dependencies
