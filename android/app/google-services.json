@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "535459549178",
+    "firebase_url": "https://poston-pdm.firebaseio.com",
+    "project_id": "poston-pdm",
+    "storage_bucket": "poston-pdm.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:535459549178:android:8d43653421ef7a5dcfde43",
+        "android_client_info": {
+          "package_name": "br.com.app.poston"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "535459549178-iff0rcsqqfig6697bak684mj70ietap2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD6JSe1tqQMcDASR2qm66b_wDx-vsSY964"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "535459549178-iff0rcsqqfig6697bak684mj70ietap2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
