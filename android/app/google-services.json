@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "964747679951",
+    "firebase_url": "https://poston-58770.firebaseio.com",
+    "project_id": "poston-58770",
+    "storage_bucket": "poston-58770.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:964747679951:android:c8a2683a0a883db5eabfba",
+        "android_client_info": {
+          "package_name": "br.com.poston.appmobile.poston"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "964747679951-k7fh8jib3cpi0m6c34gomaithk9d3t3v.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCz5C3DtBwT_hlmEurqlqJCqBqPNvagbzk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "964747679951-k7fh8jib3cpi0m6c34gomaithk9d3t3v.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
