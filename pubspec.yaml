@@ -40,6 +40,8 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^0.1.3
+  firebase_auth: ^0.18.1
+  firebase_core : ^0.5.0
 
 dev_dependencies:
   flutter_test:
@@ -62,6 +64,8 @@ flutter:
     - assets/img/driving_pin.png
     - assets/img/noun_gas_station_pin.png
     - assets/img/gas_station-71.png
+    - assets/images/iconGoogle.png
+    - assets/images/iconFacebook.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
@@ -74,12 +78,14 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
-  # fonts:
-  #   - family: Schyler
-  #     fonts:
-  #       - asset: fonts/Schyler-Regular.ttf
-  #       - asset: fonts/Schyler-Italic.ttf
-  #         style: italic
+  fonts:
+    - family: Metropolis
+      fonts:
+        - asset: assets/fonts/Metropolis-Black.otf
+        - asset: assets/fonts/Metropolis-Bold.otf
+        - asset: assets/fonts/Metropolis-Medium.otf
+        - asset: assets/fonts/Metropolis-Regular.otf
+        - asset: assets/fonts/Metropolis-SemiBold.otf
   #   - family: Trajan Pro
   #     fonts:
   #       - asset: fonts/TrajanPro.ttf

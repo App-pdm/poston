@@ -1,34 +1,59 @@
 {
   "project_info": {
+<<<<<<< HEAD
     "project_number": "964747679951",
     "firebase_url": "https://poston-58770.firebaseio.com",
     "project_id": "poston-58770",
     "storage_bucket": "poston-58770.appspot.com"
+=======
+    "project_number": "535459549178",
+    "firebase_url": "https://poston-pdm.firebaseio.com",
+    "project_id": "poston-pdm",
+    "storage_bucket": "poston-pdm.appspot.com"
+>>>>>>> 01744dcad7fffa97b4578d750f8a0472cc431db1
   },
   "client": [
     {
       "client_info": {
+<<<<<<< HEAD
         "mobilesdk_app_id": "1:964747679951:android:c8a2683a0a883db5eabfba",
         "android_client_info": {
           "package_name": "br.com.poston.appmobile.poston"
+=======
+        "mobilesdk_app_id": "1:535459549178:android:8d43653421ef7a5dcfde43",
+        "android_client_info": {
+          "package_name": "br.com.app.poston"
+>>>>>>> 01744dcad7fffa97b4578d750f8a0472cc431db1
         }
       },
       "oauth_client": [
         {
+<<<<<<< HEAD
           "client_id": "964747679951-k7fh8jib3cpi0m6c34gomaithk9d3t3v.apps.googleusercontent.com",
+=======
+          "client_id": "535459549178-iff0rcsqqfig6697bak684mj70ietap2.apps.googleusercontent.com",
+>>>>>>> 01744dcad7fffa97b4578d750f8a0472cc431db1
           "client_type": 3
         }
       ],
       "api_key": [
         {
+<<<<<<< HEAD
           "current_key": "AIzaSyCz5C3DtBwT_hlmEurqlqJCqBqPNvagbzk"
+=======
+          "current_key": "AIzaSyD6JSe1tqQMcDASR2qm66b_wDx-vsSY964"
+>>>>>>> 01744dcad7fffa97b4578d750f8a0472cc431db1
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
+<<<<<<< HEAD
               "client_id": "964747679951-k7fh8jib3cpi0m6c34gomaithk9d3t3v.apps.googleusercontent.com",
+=======
+              "client_id": "535459549178-iff0rcsqqfig6697bak684mj70ietap2.apps.googleusercontent.com",
+>>>>>>> 01744dcad7fffa97b4578d750f8a0472cc431db1
               "client_type": 3
             }
           ]
