@@ -15,8 +15,8 @@ class PostOn extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var routes = {
-      '/map': (context) => Map(),
       '/': (context) => SignupPage(),
+      '/map': (context) => Map(),
       '/signin': (context) => SigninPage()
     };
 
@@ -27,8 +27,7 @@ class PostOn extends StatelessWidget {
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       routes: routes,
-      initialRoute: '/map',
+      initialRoute: '/',
     );
   }
 }
-

@@ -95,7 +95,7 @@ class SigninPage extends StatelessWidget {
                   UserCredential userCredential = await FirebaseAuth.instance
                       .signInWithEmailAndPassword(
                           email: _email, password: _password);
-                  //Navigator.of(context).pushReplacementNamed('/map');
+                  Navigator.of(context).pushReplacementNamed('/map');
                 } on FirebaseAuthException catch (e) {
                   if (e.code == "weak-password") {
                     print('The password provied is too weak.');
