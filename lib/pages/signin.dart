@@ -92,11 +92,11 @@ class SigninPage extends StatelessWidget {
               onTap: () async {
                 _formKey.currentState.save();
                 try {
-                  UserCredential userCredential = await FirebaseAuth.instance
+                  var userCredential = await FirebaseAuth.instance
                       .signInWithEmailAndPassword(
                           email: _email, password: _password);
                   Navigator.of(context).pushReplacementNamed('/map');
-                } on FirebaseAuthException catch (e) {
+                } on AuthException catch (e) {
                   if (e.code == "weak-password") {
                     print('The password provied is too weak.');
                   } else if (e.code == 'email-already-in-use') {

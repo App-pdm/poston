@@ -90,8 +90,8 @@ class MapLocation extends State<Map> {
               markers: markers,
               scrollGesturesEnabled: true,
               zoomGesturesEnabled: true,
-              indoorViewEnabled: true,
-              trafficEnabled: true,
+              indoorViewEnabled: false,
+              trafficEnabled: false,
               mapToolbarEnabled: true,
               mapType: MapType.normal,
               zoomControlsEnabled: true,
@@ -102,7 +102,9 @@ class MapLocation extends State<Map> {
                 tilt: 0,
               ),
             ),
-            selectedPlaceDestination.placeId != null ? MapPinPillComponent(place: selectedPlaceDestination) : Container()        
+            selectedPlaceDestination.placeId != null
+                ? MapPinPillComponent(place: selectedPlaceDestination)
+                : Container()
           ]),
         ),
       ),
@@ -145,6 +147,9 @@ class MapLocation extends State<Map> {
     );
   }
 
+  Iterable<String> _allStringMatches(String text, RegExp regExp) =>
+      regExp.allMatches(text).map((m) => m.group(0));
+
   void getFuelPrice() async {
     // Alerta caso não tiver nenhum local selecionado
     if (selectedPlaceDestination.placeId == null ||
@@ -154,7 +159,26 @@ class MapLocation extends State<Map> {
       showAlertDialog(context, alertTitle, alertMessage);
     } else {
       setState(() async {
+        // Capturar texto da foto através da API
         _textImage = await tradutor.translateTextImage();
+        final regex = RegExp('[+-]?([0-9]*[.])?[0-9]+', multiLine: true);
+
+        // Filtrando preços através da RegExp
+        Iterable<String> matches = _allStringMatches(_textImage, regex);
+        List<double> prices = [];
+
+        print(matches);
+
+        // Formatando números com 3 casas decimais
+        matches.forEach((item) {
+          double n = double.parse(item);
+          n.toStringAsFixed(3);
+        });
+
+        // Convertendo para uma lista de números decimais
+        matches.map((e) => prices.add(double.parse(e)));
+        print(prices);
+
         showAlertDialog(context, "Alerta", _textImage);
       });
     }
@@ -218,13 +242,16 @@ class MapLocation extends State<Map> {
       selectedPlaceDestination.name = place.name.toString();
       selectedPlaceDestination.icon = place.icon;
       selectedPlaceDestination.formattedAddress = place.formattedAddress;
-      selectedPlaceDestination.vicinity = place.vicinity != null ? place.types.join(',') : '';
+      selectedPlaceDestination.vicinity =
+          place.vicinity != null ? place.types.join(',') : '';
     });
 
     // set up the buttons
-    Widget cancelButton = FlatButton(child: Text("Cancelar"), onPressed: () {
-      Navigator.of(context).pop();
-    });
+    Widget cancelButton = FlatButton(
+        child: Text("Cancelar"),
+        onPressed: () {
+          Navigator.of(context).pop();
+        });
     Widget continueButton = FlatButton(
         child: Text("Continuar"),
         onPressed: () async {

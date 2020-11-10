@@ -1,4 +1,3 @@
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:poston/pages/map.dart';
 import 'package:poston/pages/signin.dart';
@@ -6,7 +5,6 @@ import 'package:poston/pages/signup.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
   runApp(PostOn());
 }
 
@@ -27,7 +25,7 @@ class PostOn extends StatelessWidget {
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       routes: routes,
-      initialRoute: '/',
+      initialRoute: '/map',
     );
   }
 }
