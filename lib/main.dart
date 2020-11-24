@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:poston/pages/map.dart';
 import 'package:poston/pages/signin.dart';
 import 'package:poston/pages/signup.dart';
+import 'package:poston/pages/fuel.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -15,7 +16,7 @@ class PostOn extends StatelessWidget {
     var routes = {
       '/': (context) => SignupPage(),
       '/map': (context) => Map(),
-      '/signin': (context) => SigninPage()
+      '/signin': (context) => SigninPage(),
     };
 
     return MaterialApp(

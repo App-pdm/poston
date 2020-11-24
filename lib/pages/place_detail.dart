@@ -1,6 +1,9 @@
+import 'dart:async';
 import 'package:google_maps_webservice/places.dart';
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:poston/models/fuel.dart';
 
 const kGoogleApiKey = "AIzaSyBuTlwdWzZXm140ULb3DhocI9znsll8sog";
 GoogleMapsPlaces _places = GoogleMapsPlaces(apiKey: kGoogleApiKey);
@@ -24,11 +27,30 @@ class PlaceDetailState extends State<PlaceDetailWidget> {
   bool isLoading = false;
   String errorLoading;
   Set<Marker> markers = {};
+  Completer<GoogleMapController> _controller = Completer();
+  DocumentSnapshot document;
+
+  BitmapDescriptor sourceIcon;
+  BitmapDescriptor destinationIcon;
 
   @override
   void initState() {
+    setSourceAndDestinationIcons();
     fetchPlaceDetail();
     super.initState();
+  }
+
+  getDocuments() async {
+    final QuerySnapshot searchedByPlaceId = await Firestore.instance
+        .collection('combustiveis')
+        .where('placeId', isEqualTo: widget.placeId)
+        .limit(1)
+        .getDocuments()
+        .then((value) {
+      setState(() {
+        document = value.documents.first;
+      });
+    });
   }
 
   @override
@@ -63,24 +85,41 @@ class PlaceDetailState extends State<PlaceDetailWidget> {
               child: SizedBox(
             height: 200.0,
             child: GoogleMap(
-              onMapCreated: _onMapCreated,
               markers: markers,
+              onMapCreated: _onMapCreated,
               myLocationEnabled: true,
-              initialCameraPosition: CameraPosition(target: center, zoom: 15.0))
+              initialCameraPosition: CameraPosition(target: center, zoom: 15.0),
+            ),
           )),
           Expanded(
             child: buildPlaceDetailList(placeDetail),
-          )
+          ),
+          Expanded(child: buildFuelList())
         ],
       );
     }
 
     return Scaffold(
         appBar: AppBar(
-          title: Text(title),
-          backgroundColor: Colors.black,
+          backgroundColor: Colors.purple[900],
+          title: Container(
+            alignment: Alignment.centerLeft,
+            child: Text(title,
+                style: TextStyle(
+                  color: Colors.white,
+                )),
+          ),
         ),
         body: bodyChild);
+  }
+
+  void setSourceAndDestinationIcons() async {
+    sourceIcon = await BitmapDescriptor.fromAssetImage(
+        ImageConfiguration(devicePixelRatio: 2.5),
+        'assets/img/driving_pin.png');
+    destinationIcon = await BitmapDescriptor.fromAssetImage(
+        ImageConfiguration(devicePixelRatio: 2.5, size: Size(20, 20)),
+        'assets/img/noun_gas_station_pin.png');
   }
 
   void fetchPlaceDetail() async {
@@ -91,6 +130,8 @@ class PlaceDetailState extends State<PlaceDetailWidget> {
 
     PlacesDetailsResponse place =
         await _places.getDetailsByPlaceId(widget.placeId);
+
+    await getDocuments();
 
     if (mounted) {
       setState(() {
@@ -104,30 +145,46 @@ class PlaceDetailState extends State<PlaceDetailWidget> {
     }
   }
 
-  void addMarker(Marker marker){
-    setState(() {
-       markers.add(marker);
-    });
-  }
-
-  void _onMapCreated(GoogleMapController controller) {
+  void _onMapCreated(GoogleMapController controller) async {
     mapController = controller;
-    final placeDetail = place.result;
+    final placeDetail = await place.result;
     final location = place.result.geometry.location;
     final lat = location.lat;
     final lng = location.lng;
     final center = LatLng(lat, lng);
-    addMarker(
-      Marker(
+    Marker marker = Marker(
         position: center,
-      )
-    );
-    mapController.animateCamera(CameraUpdate.newCameraPosition(
-        CameraPosition(target: center, zoom: 15.0)));
+        icon: destinationIcon,
+        infoWindow: InfoWindow(
+            title: "${placeDetail.name}",
+            snippet: "${placeDetail.formattedAddress}"));
+    markers.add(marker);
   }
 
   String buildPhotoURL(String photoReference) {
     return "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${photoReference}&key=${kGoogleApiKey}";
+  }
+
+  ListView buildFuelList() {
+    List<Widget> list = [];
+    bool price = false;
+    document.data.entries.forEach((element) {
+      if (element.key != null &&
+          element.value != null &&
+          element.key != "placeId") {
+        if (price == false) {
+          list.add(Text("Preços: "));
+          price = true;
+        }
+        list.add(Text(
+            "${element.key.toString()} = R\$ ${element.value.toString()}"));
+      }
+    });
+
+    return ListView(
+      shrinkWrap: true,
+      children: list,
+    );
   }
 
   ListView buildPlaceDetailList(PlaceDetails placeDetail) {
@@ -156,7 +213,6 @@ class PlaceDetailState extends State<PlaceDetailWidget> {
               EdgeInsets.only(top: 4.0, left: 8.0, right: 8.0, bottom: 4.0),
           child: Text(
             placeDetail.name,
-            style: Theme.of(context).textTheme.subtitle,
           )),
     );
 
@@ -167,7 +223,6 @@ class PlaceDetailState extends State<PlaceDetailWidget> {
                 EdgeInsets.only(top: 4.0, left: 8.0, right: 8.0, bottom: 4.0),
             child: Text(
               placeDetail.formattedAddress,
-              style: Theme.of(context).textTheme.body1,
             )),
       );
     }
@@ -190,7 +245,7 @@ class PlaceDetailState extends State<PlaceDetailWidget> {
             padding:
                 EdgeInsets.only(top: 4.0, left: 8.0, right: 8.0, bottom: 4.0),
             child: Text(
-              placeDetail.formattedPhoneNumber,
+              "Telefone: ${placeDetail.formattedPhoneNumber}",
               style: Theme.of(context).textTheme.button,
             )),
       );
