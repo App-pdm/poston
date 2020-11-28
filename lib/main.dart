@@ -3,6 +3,7 @@ import 'package:poston/pages/forgot_password.dart';
 import 'package:poston/pages/signin.dart';
 import 'package:poston/pages/signup.dart';
 import 'package:poston/pages/start.dart';
+import 'package:poston/pages/fuel.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

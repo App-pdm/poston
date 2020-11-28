@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_maps_webservice/places.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:flutter/material.dart';
@@ -7,6 +8,9 @@ import 'package:poston/requests/map_request.dart';
 import 'package:poston/components/map_pin_pill.dart';
 import 'package:poston/models/posto.dart';
 import 'package:poston/components/translator.dart';
+import 'package:poston/pages/fuel.dart';
+import 'package:poston/pages/place_detail.dart';
+import 'package:poston/pages/gas_station.dart';
 import 'dart:math' show cos, sqrt, asin;
 
 const apiKey = "AIzaSyBuTlwdWzZXm140ULb3DhocI9znsll8sog";
@@ -44,6 +48,8 @@ class MapLocation extends State<Map> {
   //for my custom icons
   BitmapDescriptor sourceIcon;
   BitmapDescriptor destinationIcon;
+
+  PersistentBottomSheetController controller;
 
   @override
   void initState() {
@@ -104,20 +110,70 @@ class MapLocation extends State<Map> {
             ),
             selectedPlaceDestination.placeId != null
                 ? MapPinPillComponent(place: selectedPlaceDestination)
-                : Container()
+                : SizedBox(),
           ]),
         ),
       ),
       floatingActionButton: FloatingActionButton(
-          onPressed: getFuelPrice,
+          onPressed: () => showGasStationList(),
           backgroundColor: Colors.black,
           child: IconButton(
-              icon: Icon(
-                Icons.local_gas_station,
-                color: Colors.white,
-              ),
-              onPressed: () => getFuelPrice())),
+            icon: Icon(
+              Icons.local_gas_station,
+              color: Colors.white,
+            ),
+            //onPressed: () => getFuelPrice()
+          )),
     );
+  }
+
+  void _configurandoModalBottomSheet(
+      context, LatLng center, PlacesSearchResult place) {
+    showModalBottomSheet(
+        context: context,
+        builder: (BuildContext bc) {
+          return Container(
+            margin: EdgeInsets.only(top: 20),
+            child: Wrap(
+              children: <Widget>[
+                Row(children: [
+                  Text(
+                    place.name,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                ], mainAxisAlignment: MainAxisAlignment.center),
+                SizedBox(
+                  height: 20,
+                ),
+                ListTile(
+                    leading: new Icon(FontAwesomeIcons.moneyBill,
+                        color: Colors.green),
+                    title: new Text('Informar Preço'),
+                    onTap: () => showFuelPricePage(place.placeId)),
+                ListTile(
+                  leading:
+                      new Icon(FontAwesomeIcons.route, color: Colors.green),
+                  title: new Text('Traçar Rota'),
+                  onTap: () => {createRouteCoordinates(context, center, place)},
+                ),
+                ListTile(
+                  leading:
+                      new Icon(FontAwesomeIcons.camera, color: Colors.green),
+                  title: new Text('Tirar Foto'),
+                  onTap: () => {getFuelPrice()},
+                ),
+                ListTile(
+                  leading: new Icon(FontAwesomeIcons.info, color: Colors.green),
+                  title: new Text('Ver Detalhes'),
+                  onTap: () {
+                    showPlaceDetails(place.placeId);
+                  },
+                ),
+              ],
+            ),
+          );
+        });
   }
 
   showAlertDialog(BuildContext context, String title, String message) {
@@ -151,37 +207,29 @@ class MapLocation extends State<Map> {
       regExp.allMatches(text).map((m) => m.group(0));
 
   void getFuelPrice() async {
-    // Alerta caso não tiver nenhum local selecionado
-    if (selectedPlaceDestination.placeId == null ||
-        selectedPlaceDestination.placeId == '') {
-      String alertTitle = "Alerta";
-      String alertMessage = "Selecione o marcador do posto que você abasteceu";
-      showAlertDialog(context, alertTitle, alertMessage);
-    } else {
-      setState(() async {
-        // Capturar texto da foto através da API
-        _textImage = await tradutor.translateTextImage();
-        final regex = RegExp('[+-]?([0-9]*[.])?[0-9]+', multiLine: true);
+    setState(() async {
+      // Capturar texto da foto através da API
+      _textImage = await tradutor.translateTextImage();
+      final regex = RegExp('[+-]?([0-9]*[.])?[0-9]+', multiLine: true);
 
-        // Filtrando preços através da RegExp
-        Iterable<String> matches = _allStringMatches(_textImage, regex);
-        List<double> prices = [];
+      // Filtrando preços através da RegExp
+      Iterable<String> matches = _allStringMatches(_textImage, regex);
+      List<double> prices = [];
 
-        print(matches);
+      print(matches);
 
-        // Formatando números com 3 casas decimais
-        matches.forEach((item) {
-          double n = double.parse(item);
-          n.toStringAsFixed(3);
-        });
-
-        // Convertendo para uma lista de números decimais
-        matches.map((e) => prices.add(double.parse(e)));
-        print(prices);
-
-        showAlertDialog(context, "Alerta", _textImage);
+      // Formatando números com 3 casas decimais
+      matches.forEach((item) {
+        double n = double.parse(item);
+        n.toStringAsFixed(3);
       });
-    }
+
+      // Convertendo para uma lista de números decimais
+      matches.map((e) => prices.add(double.parse(e)));
+      print(prices);
+
+      showAlertDialog(context, "Alerta", _textImage);
+    });
   }
 
   List<LatLng> _convertToLatLng(List points) {
@@ -234,8 +282,54 @@ class MapLocation extends State<Map> {
     });
   }
 
-  void showConfirmationDialog(
-      BuildContext context, LatLng origin, PlacesSearchResult place) {
+  Future<Null> showFuelPricePage(String placeId) async {
+    if (placeId != null) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => FuelPage(placeId)),
+      );
+    }
+  }
+
+  Future<Null> showPlaceDetails(String placeId) async {
+    if (placeId != null) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => PlaceDetailWidget(placeId)),
+      );
+    }
+  }
+
+  Future<Null> showGasStationList() async {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => GasSationList()),
+    );
+  }
+
+  calculateDistance(LatLng origin, LatLng destination) async {
+    double distanceInMeters = await Geolocator().distanceBetween(
+      origin.latitude,
+      origin.longitude,
+      destination.latitude,
+      destination.longitude,
+    );
+
+    var formatedDistance = distanceInMeters.toString();
+
+    if (distanceInMeters > 1000) {
+      var kilometragem = distanceInMeters / 1000;
+      formatedDistance = kilometragem.toStringAsFixed(2) + "Km";
+    } else {
+      formatedDistance = distanceInMeters.toStringAsFixed(2) + " metros";
+    }
+    return formatedDistance;
+  }
+
+  void createRouteCoordinates(
+      BuildContext context, LatLng origin, PlacesSearchResult place) async {
+    var distance = await calculateDistance(origin,
+        LatLng(place.geometry.location.lat, place.geometry.location.lng));
     // Set Pin Place Selected
     setState(() {
       selectedPlaceDestination.placeId = place.placeId;
@@ -244,39 +338,13 @@ class MapLocation extends State<Map> {
       selectedPlaceDestination.formattedAddress = place.formattedAddress;
       selectedPlaceDestination.vicinity =
           place.vicinity != null ? place.types.join(',') : '';
+      selectedPlaceDestination.distance = distance;
     });
 
-    // set up the buttons
-    Widget cancelButton = FlatButton(
-        child: Text("Cancelar"),
-        onPressed: () {
-          Navigator.of(context).pop();
-        });
-    Widget continueButton = FlatButton(
-        child: Text("Continuar"),
-        onPressed: () async {
-          String route = await _googleMapsServices.getRouteCoordinates(origin,
-              LatLng(place.geometry.location.lat, place.geometry.location.lng));
-          _polyLines.clear();
-          createRoute(route);
-          Navigator.of(context).pop();
-        });
-    // set up the AlertDialog
-    AlertDialog alert = AlertDialog(
-      title: Text("Alerta"),
-      content: Text("Deseja exibir a rota até o destino selecionado?"),
-      actions: [
-        cancelButton,
-        continueButton,
-      ],
-    );
-    // show the dialog
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return alert;
-      },
-    );
+    String route = await _googleMapsServices.getRouteCoordinates(origin,
+        LatLng(place.geometry.location.lat, place.geometry.location.lng));
+    _polyLines.clear();
+    createRoute(route);
   }
 
   void setSourceAndDestinationIcons() async {
@@ -349,6 +417,7 @@ class MapLocation extends State<Map> {
 
     final result =
         await _places.searchByText('gas station', location: location);
+
     setState(() {
       this.isLoading = false;
       if (result.status == "OK") {
@@ -369,7 +438,12 @@ class MapLocation extends State<Map> {
               icon: destinationIcon,
               position: LatLng(
                   place.geometry.location.lat, place.geometry.location.lng),
-              onTap: () => showConfirmationDialog(context, center, place));
+              //onTap: () => showFuelPricePage(place
+              //.placeId));
+              onTap: () =>
+                  _configurandoModalBottomSheet(context, center, place));
+          //onTap: () => showConfirmationDialog(context, center, place));
+
           markers.add(marker);
         });
       } else {
