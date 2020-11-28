@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:poston/pages/forgot_password.dart';
 import 'package:poston/pages/map.dart';
 import 'package:poston/pages/signin.dart';
 import 'package:poston/pages/signup.dart';
@@ -13,9 +14,10 @@ class PostOn extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var routes = {
-      '/': (context) => SignupPage(),
+      '/': (context) => SigninPage(),
       '/map': (context) => Map(),
-      '/signin': (context) => SigninPage()
+      '/signup': (context) => SignupPage(),
+      '/forgot': (context) => ForgotPasswordPage()
     };
 
     return MaterialApp(
@@ -25,7 +27,7 @@ class PostOn extends StatelessWidget {
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       routes: routes,
-      initialRoute: '/map',
+      initialRoute: '/',
     );
   }
 }

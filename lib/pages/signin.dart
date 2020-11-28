@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:poston/models/sign_in.dart';
 import 'package:poston/widgets/containertext.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -16,8 +17,8 @@ class SigninPage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            GestureDetector(
-              onTap: () => Navigator.of(context).pop(),
+            Opacity(
+              opacity: 0,
               child: Container(
                 margin: EdgeInsets.fromLTRB(8, 8, 343, 0),
                 child: Icon(
@@ -61,14 +62,14 @@ class SigninPage extends StatelessWidget {
               ),
             ),
             GestureDetector(
-              onTap: () => Navigator.of(context).pop(),
+              onTap: () => Navigator.of(context).pushNamed('/signup'),
               child: Container(
-                margin: EdgeInsets.only(right: 16),
+                margin: EdgeInsets.only(right: 16, top: 8),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     Text(
-                      'Já tem uma conta?',
+                      'Ainda não tem uma conta?',
                       style: TextStyle(
                         fontFamily: 'Metropolis',
                         fontWeight: FontWeight.w600,
@@ -107,7 +108,7 @@ class SigninPage extends StatelessWidget {
                 }
               },
               child: Container(
-                margin: EdgeInsets.fromLTRB(16, 28, 16, 126),
+                margin: EdgeInsets.fromLTRB(16, 28, 16, 0),
                 height: 48,
                 decoration: BoxDecoration(
                   color: Color(0xFFDB3022),
@@ -128,13 +129,35 @@ class SigninPage extends StatelessWidget {
                       fontSize: 14,
                       height: 1.4285,
                       color: Color(0xFFFFFFFF),
+                      fontWeight: FontWeight.w500,
                     ),
                   ),
                 ),
               ),
             ),
+            GestureDetector(
+              onTap: () => Navigator.of(context).pushNamed('/forgot'),
+              child: Container(
+                margin: EdgeInsets.fromLTRB(0, 16, 16, 110),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Text(
+                      'Esqueceu a senha?',
+                      style: TextStyle(
+                        fontFamily: 'Metropolis',
+                        fontWeight: FontWeight.w600,
+                        color: Color(0xFFDB3022),
+                        fontSize: 14,
+                        height: 1.4285,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
             Container(
-              margin: EdgeInsets.fromLTRB(86, 0, 85, 0),
+              alignment: Alignment.center,
               child: Text(
                 'Ou entre com suas redes sociais',
                 style: TextStyle(
@@ -147,41 +170,53 @@ class SigninPage extends StatelessWidget {
               ),
             ),
             Container(
-              margin: EdgeInsets.fromLTRB(88, 16, 87, 23),
+              margin: EdgeInsets.fromLTRB(88, 16, 0, 23),
               child: Row(
                 children: [
-                  Container(
-                    margin: EdgeInsets.only(right: 16),
-                    width: 92,
-                    height: 64,
-                    decoration: BoxDecoration(
-                      color: Color(0xFFFFFFFF),
-                      boxShadow: [
-                        BoxShadow(
-                          offset: Offset(0, 1),
-                          blurRadius: 8,
-                          color: Color.fromRGBO(0, 0, 0, 0.05),
-                        ),
-                      ],
-                      borderRadius: BorderRadius.circular(24),
+                  GestureDetector(
+                    onTap: () async {
+                      signInFB().whenComplete(() =>
+                          Navigator.of(context).pushReplacementNamed('/map'));
+                    },
+                    child: Container(
+                      margin: EdgeInsets.only(right: 16),
+                      width: 92,
+                      height: 64,
+                      decoration: BoxDecoration(
+                        color: Color(0xFFFFFFFF),
+                        boxShadow: [
+                          BoxShadow(
+                            offset: Offset(0, 1),
+                            blurRadius: 8,
+                            color: Color.fromRGBO(0, 0, 0, 0.05),
+                          ),
+                        ],
+                        borderRadius: BorderRadius.circular(24),
+                      ),
+                      child: Image.asset('assets/images/iconFacebook.png'),
                     ),
-                    child: Image.asset('assets/images/iconFacebook.png'),
                   ),
-                  Container(
-                    width: 92,
-                    height: 64,
-                    decoration: BoxDecoration(
-                      color: Color(0xFFFFFFFF),
-                      boxShadow: [
-                        BoxShadow(
-                          offset: Offset(0, 1),
-                          blurRadius: 8,
-                          color: Color.fromRGBO(0, 0, 0, 0.05),
-                        ),
-                      ],
-                      borderRadius: BorderRadius.circular(24),
+                  GestureDetector(
+                    onTap: () async {
+                      signInWithGoogle().whenComplete(() =>
+                          Navigator.of(context).pushReplacementNamed('/map'));
+                    },
+                    child: Container(
+                      width: 92,
+                      height: 64,
+                      decoration: BoxDecoration(
+                        color: Color(0xFFFFFFFF),
+                        boxShadow: [
+                          BoxShadow(
+                            offset: Offset(0, 1),
+                            blurRadius: 8,
+                            color: Color.fromRGBO(0, 0, 0, 0.05),
+                          ),
+                        ],
+                        borderRadius: BorderRadius.circular(24),
+                      ),
+                      child: Image.asset('assets/images/iconGoogle.png'),
                     ),
-                    child: Image.asset('assets/images/iconGoogle.png'),
                   ),
                 ],
               ),

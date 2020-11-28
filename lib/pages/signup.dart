@@ -17,17 +17,20 @@ class SignupPage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Container(
-              margin: EdgeInsets.fromLTRB(8, 8, 343, 0),
-              child: Icon(
-                Icons.arrow_back_ios,
-                color: Color(0xFF222222),
+            GestureDetector(
+              onTap: () => Navigator.of(context).pop(),
+              child: Container(
+                margin: EdgeInsets.fromLTRB(15, 12, 0, 0),
+                child: Icon(
+                  Icons.arrow_back_ios,
+                  color: Color(0xFF222222),
+                ),
               ),
             ),
             Container(
-              margin: EdgeInsets.fromLTRB(14, 34, 213, 73),
+              margin: EdgeInsets.fromLTRB(14, 34, 0, 73),
               child: Text(
-                'Sign up',
+                'Cadastre-se',
                 style: TextStyle(
                   fontFamily: 'Metropolis',
                   fontSize: 34,
@@ -42,10 +45,17 @@ class SignupPage extends StatelessWidget {
               child: Column(
                 children: [
                   CustomContainer(
-                    text: 'Email',
+                    text: 'Nome',
                     keyboardType: TextInputType.emailAddress,
                     obscureText: false,
                     onSaved: (value) => _nome = value,
+                    onChanged: (value) => _nome = value,
+                  ),
+                  CustomContainer(
+                    text: 'Email',
+                    keyboardType: TextInputType.emailAddress,
+                    obscureText: false,
+                    onSaved: (value) => _email = value,
                     onChanged: (value) => _email = value,
                   ),
                   CustomContainer(
@@ -65,14 +75,14 @@ class SignupPage extends StatelessWidget {
               ),
             ),
             GestureDetector(
-              onTap: () => Navigator.of(context).pushNamed('/signin'),
+              onTap: () => Navigator.of(context).pop(),
               child: Container(
-                margin: EdgeInsets.only(right: 16),
+                margin: EdgeInsets.only(right: 16, top: 8),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     Text(
-                      'Ainda não tem uma conta?',
+                      'Já tem uma conta?',
                       style: TextStyle(
                         fontFamily: 'Metropolis',
                         fontWeight: FontWeight.w600,
@@ -99,9 +109,8 @@ class SignupPage extends StatelessWidget {
                   var userCredential = await FirebaseAuth.instance
                       .createUserWithEmailAndPassword(
                           email: _email, password: _password);
-                  // var userName = AdditionalUserInfo();
-                  // _nome = userName.username.toString();
-                  //Navigator.of(context).pushReplacementNamed('/map');
+                  _nome = userCredential.user.displayName;
+                  Navigator.of(context).pushReplacementNamed('/map');
                 } on AuthException catch (e) {
                   if (e.code == "weak-password") {
                     print('The password provied is too weak.');
@@ -128,21 +137,22 @@ class SignupPage extends StatelessWidget {
                 ),
                 child: Center(
                   child: Text(
-                    'SIGN UP',
+                    'CADASTRE-SE',
                     style: TextStyle(
                       fontFamily: 'Metropolis',
                       fontSize: 14,
                       height: 1.4285,
                       color: Color(0xFFFFFFFF),
+                      fontWeight: FontWeight.w500,
                     ),
                   ),
                 ),
               ),
             ),
             Container(
-              margin: EdgeInsets.fromLTRB(86, 0, 85, 0),
+              alignment: Alignment.center,
               child: Text(
-                'Or sign up with social account',
+                'Ou entre com suas redes sociais',
                 style: TextStyle(
                   fontFamily: 'Metropolis',
                   fontWeight: FontWeight.w600,
@@ -153,7 +163,7 @@ class SignupPage extends StatelessWidget {
               ),
             ),
             Container(
-              margin: EdgeInsets.fromLTRB(88, 16, 87, 23),
+              margin: EdgeInsets.fromLTRB(88, 16, 0, 23),
               child: Row(
                 children: [
                   Container(
