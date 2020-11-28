@@ -96,7 +96,7 @@ class SigninPage extends StatelessWidget {
                   var userCredential = await FirebaseAuth.instance
                       .signInWithEmailAndPassword(
                           email: _email, password: _password);
-                  Navigator.of(context).pushReplacementNamed('/map');
+                  Navigator.of(context).pushReplacementNamed('/start');
                 } on AuthException catch (e) {
                   if (e.code == "weak-password") {
                     print('The password provied is too weak.');
@@ -176,7 +176,7 @@ class SigninPage extends StatelessWidget {
                   GestureDetector(
                     onTap: () async {
                       signInFB().whenComplete(() =>
-                          Navigator.of(context).pushReplacementNamed('/map'));
+                          Navigator.of(context).pushReplacementNamed('/start'));
                     },
                     child: Container(
                       margin: EdgeInsets.only(right: 16),
@@ -199,7 +199,7 @@ class SigninPage extends StatelessWidget {
                   GestureDetector(
                     onTap: () async {
                       signInWithGoogle().whenComplete(() =>
-                          Navigator.of(context).pushReplacementNamed('/map'));
+                          Navigator.of(context).pushReplacementNamed('/start'));
                     },
                     child: Container(
                       width: 92,

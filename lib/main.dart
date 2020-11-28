@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:poston/pages/forgot_password.dart';
-import 'package:poston/pages/map.dart';
 import 'package:poston/pages/signin.dart';
 import 'package:poston/pages/signup.dart';
+import 'package:poston/pages/start.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -15,9 +15,9 @@ class PostOn extends StatelessWidget {
   Widget build(BuildContext context) {
     var routes = {
       '/': (context) => SigninPage(),
-      '/map': (context) => Map(),
       '/signup': (context) => SignupPage(),
-      '/forgot': (context) => ForgotPasswordPage()
+      '/forgot': (context) => ForgotPasswordPage(),
+      '/start': (context) => StartPage(),
     };
 
     return MaterialApp(
