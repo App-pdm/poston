@@ -6,6 +6,8 @@ final FirebaseAuth _auth = FirebaseAuth.instance;
 final GoogleSignIn googleSignIn = GoogleSignIn();
 final fbLogin = FacebookLogin();
 String photo;
+String nome;
+String email;
 
 Future<String> signInWithGoogle() async {
   final GoogleSignInAccount googleSignInAccount = await googleSignIn.signIn();
@@ -26,6 +28,10 @@ Future<String> signInWithGoogle() async {
   final FirebaseUser currentUser = await _auth.currentUser();
   assert(user.uid == currentUser.uid);
 
+  photo = user.photoUrl;
+  email = currentUser.email;
+  nome = currentUser.displayName;
+
   return null;
 }
 
@@ -43,13 +49,16 @@ Future<String> signInFB() async {
       AuthResult authResult = await _auth.signInWithCredential(credential);
       final FirebaseUser user = authResult.user;
 
-      photo = user.photoUrl;
-
       assert(!user.isAnonymous);
       assert(await user.getIdToken() != null);
 
       final FirebaseUser currentUser = await _auth.currentUser();
       assert(user.uid == currentUser.uid);
+
+      photo = user.photoUrl;
+      email = user.email;
+      nome = user.displayName;
+
       break;
     case FacebookLoginStatus.cancelledByUser:
       print("Facebook login cancelled");

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:poston/pages/forgot_password.dart';
+import 'package:poston/pages/profile.dart';
 import 'package:poston/pages/signin.dart';
 import 'package:poston/pages/signup.dart';
 import 'package:poston/pages/start.dart';
@@ -19,14 +20,15 @@ class PostOn extends StatelessWidget {
       '/signup': (context) => SignupPage(),
       '/forgot': (context) => ForgotPasswordPage(),
       '/start': (context) => StartPage(),
+      '/profile': (context) => ProfilePage(),
     };
 
     return MaterialApp(
       title: 'PostON',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-      ),
+          primaryColor: Color(0xFFE5E5E5),
+          visualDensity: VisualDensity.adaptivePlatformDensity,
+          fontFamily: "Metropolis"),
       routes: routes,
       initialRoute: '/',
     );
