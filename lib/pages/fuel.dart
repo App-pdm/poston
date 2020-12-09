@@ -69,7 +69,6 @@ class FuelPageState extends State<FuelPage> {
     final QuerySnapshot searchedByPlaceId = await Firestore.instance
         .collection('combustiveis')
         .where('placeId', isEqualTo: widget.placeId)
-        .limit(1)
         .getDocuments()
         .then((value) async {
       if (value.documents.length != 1) {
@@ -79,7 +78,7 @@ class FuelPageState extends State<FuelPage> {
       } else {
         price = "R\$" + value.documents.first.data[fuel] ?? "Não encontrado";
       }
-    });
+    }).catchError((e) => print("error fetching data: $e"));
     return price;
   }
 
@@ -289,9 +288,16 @@ class FuelPageState extends State<FuelPage> {
                               await _verifyChanges(
                                   newFuelPrice.text, selectedCurrency);
                             }
+                            FocusScope.of(context).requestFocus(FocusNode());
                             await Toast.show(
                                 "Salvo! Agradecemos o seu feedback.", context,
                                 duration: 5);
+                            setState(() {
+                              selectedCurrency = null;
+                              _formKey.currentState.reset();
+                            });
+
+                            //Navigator.of(context).pop();
                           }),
                         }
                     },
