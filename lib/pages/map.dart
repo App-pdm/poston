@@ -458,10 +458,8 @@ class MapLocation extends State<MapPage> {
             //onTap: () => showFuelPricePage(place
             //.placeId));
 
-            onDragEnd: (LatLng position) =>
-                {_configurandoModalBottomSheet(context, center, place)},
             onTap: () => {
-              createRouteCoordinates(context, center, place),
+              _configurandoModalBottomSheet(context, center, place),
             },
           );
 

@@ -235,17 +235,6 @@ class GasStation extends State<GasSationList> {
         );
       }
 
-      listPadding.add(Flexible(
-        child: Row(children: [
-          SizedBox(width: 35),
-          Icon(Icons.star, color: Colors.amber, size: 16),
-          Icon(Icons.star, color: Colors.amber, size: 16),
-          Icon(Icons.star, color: Colors.amber, size: 16),
-          Icon(Icons.star, color: Colors.amber, size: 16),
-          Icon(Icons.star_border, color: Colors.grey, size: 16),
-        ]),
-      ));
-
       documents.forEach((element) {
         if (element.data["placeId"] == f.placeId) {
           bool price = false;
