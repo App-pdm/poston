@@ -15,7 +15,7 @@ class _StartPage extends State<StartPage> {
 
   static List<Widget> _widgetOptions = <Widget>[
     GasSationList(),
-    Map(),
+    MapPage(),
     ProfilePage(),
   ];
 

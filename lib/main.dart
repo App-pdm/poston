@@ -7,6 +7,7 @@ import 'package:poston/pages/signin.dart';
 import 'package:poston/pages/signup.dart';
 import 'package:poston/pages/start.dart';
 import 'package:poston/pages/fuel.dart';
+import 'package:poston/pages/map.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -24,7 +25,7 @@ class PostOn extends StatelessWidget {
       '/start': (context) => StartPage(),
       '/profile': (context) => ProfilePage(),
       '/profile/changename': (context) => ChangeNamePage(),
-      // '/map': (context) => MapLocation(),
+      '/map': (context) => MapPage(),
     };
 
     return MaterialApp(
@@ -34,7 +35,7 @@ class PostOn extends StatelessWidget {
           visualDensity: VisualDensity.adaptivePlatformDensity,
           fontFamily: "Metropolis"),
       routes: routes,
-      initialRoute: '/',
+      initialRoute: '/map',
     );
   }
 }
