@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:poston/pages/change_name.dart';
 import 'package:poston/pages/forgot_password.dart';
+import 'package:poston/pages/map.dart';
 import 'package:poston/pages/profile.dart';
 import 'package:poston/pages/signin.dart';
 import 'package:poston/pages/signup.dart';
@@ -21,6 +23,8 @@ class PostOn extends StatelessWidget {
       '/forgot': (context) => ForgotPasswordPage(),
       '/start': (context) => StartPage(),
       '/profile': (context) => ProfilePage(),
+      '/profile/changename': (context) => ChangeNamePage(),
+      // '/map': (context) => MapLocation(),
     };
 
     return MaterialApp(

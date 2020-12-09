@@ -28,10 +28,6 @@ Future<String> signInWithGoogle() async {
   final FirebaseUser currentUser = await _auth.currentUser();
   assert(user.uid == currentUser.uid);
 
-  photo = user.photoUrl;
-  email = currentUser.email;
-  nome = currentUser.displayName;
-
   return null;
 }
 
@@ -46,18 +42,14 @@ Future<String> signInFB() async {
     case FacebookLoginStatus.loggedIn:
       final AuthCredential credential = FacebookAuthProvider.getCredential(
           accessToken: result.accessToken.token);
-      AuthResult authResult = await _auth.signInWithCredential(credential);
+      final authResult = await _auth.signInWithCredential(credential);
       final FirebaseUser user = authResult.user;
 
+      assert(user.displayName != null);
+      assert(user.photoUrl != null);
+      assert(user.email != null);
       assert(!user.isAnonymous);
       assert(await user.getIdToken() != null);
-
-      final FirebaseUser currentUser = await _auth.currentUser();
-      assert(user.uid == currentUser.uid);
-
-      photo = user.photoUrl;
-      email = user.email;
-      nome = user.displayName;
 
       break;
     case FacebookLoginStatus.cancelledByUser:

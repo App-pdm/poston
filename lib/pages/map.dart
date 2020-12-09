@@ -63,22 +63,36 @@ class MapLocation extends State<Map> {
     return Scaffold(
       key: homeScaffoldKey,
       appBar: AppBar(
-        title: const Text("Pra onde vamos?"),
+        title: const Text(
+          "Pra onde vamos?",
+          style: TextStyle(
+            color: Colors.white,
+          ),
+        ),
         backgroundColor: Colors.black,
         actions: <Widget>[
           isLoading
               ? IconButton(
-                  icon: Icon(Icons.timer),
+                  icon: Icon(
+                    Icons.timer,
+                    color: Colors.white,
+                  ),
                   onPressed: () {},
                 )
               : IconButton(
-                  icon: Icon(Icons.refresh),
+                  icon: Icon(
+                    Icons.refresh,
+                    color: Colors.white,
+                  ),
                   onPressed: () {
                     refresh();
                   },
                 ),
           IconButton(
-            icon: Icon(Icons.search),
+            icon: Icon(
+              Icons.search,
+              color: Colors.white,
+            ),
             onPressed: () {
               //_handlePressButton();
             },
@@ -100,7 +114,7 @@ class MapLocation extends State<Map> {
               trafficEnabled: false,
               mapToolbarEnabled: true,
               mapType: MapType.normal,
-              zoomControlsEnabled: true,
+              zoomControlsEnabled: false,
               myLocationEnabled: true,
               initialCameraPosition: CameraPosition(
                 target: LatLng(40.712776, -74.005974),
@@ -114,16 +128,19 @@ class MapLocation extends State<Map> {
           ]),
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-          onPressed: () => showGasStationList(),
-          backgroundColor: Colors.black,
-          child: IconButton(
-            icon: Icon(
-              Icons.local_gas_station,
-              color: Colors.white,
-            ),
-            //onPressed: () => getFuelPrice()
-          )),
+      floatingActionButton: Container(
+        padding: EdgeInsets.only(bottom: 100),
+        child: FloatingActionButton(
+            onPressed: () => showGasStationList(),
+            backgroundColor: Colors.black,
+            child: IconButton(
+              icon: Icon(
+                Icons.local_gas_station,
+                color: Colors.white,
+              ),
+              //onPressed: () => getFuelPrice()
+            )),
+      ),
     );
   }
 

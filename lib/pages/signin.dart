@@ -171,8 +171,9 @@ class SigninPage extends StatelessWidget {
                   ),
                 ),
                 Container(
-                  margin: EdgeInsets.fromLTRB(105, 16, 0, 23),
+                  margin: EdgeInsets.fromLTRB(0, 16, 0, 23),
                   child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       GestureDetector(
                         onTap: () async {
