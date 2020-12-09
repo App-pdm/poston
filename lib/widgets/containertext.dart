@@ -42,12 +42,16 @@ class CustomContainer extends StatelessWidget {
             labelStyle: TextStyle(
               color: Color(0xFF9B9B9B),
               fontSize: 11,
+              fontFamily: 'Metropolis',
+              fontWeight: FontWeight.w500,
               height: 1,
             ),
             hintText: text,
             hintStyle: TextStyle(
               color: Color(0xFF9B9B9B),
               fontSize: 14,
+              fontFamily: 'Metropolis',
+              fontWeight: FontWeight.w500,
               height: 1.4285,
             ),
             border: InputBorder.none,

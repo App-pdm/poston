@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_webservice/places.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 const apiKey = "AIzaSyBuTlwdWzZXm140ULb3DhocI9znsll8sog";
 GoogleMapsPlaces _places = GoogleMapsPlaces(apiKey: apiKey);
@@ -22,9 +24,9 @@ class GasStation extends State<GasSationList> {
 
   @override
   initState() {
-    super.initState();
-    getNearbyPlaces();
     getDocuments();
+    getNearbyPlaces();
+    super.initState();
   }
 
   @override
@@ -44,7 +46,7 @@ class GasStation extends State<GasSationList> {
         appBar: AppBar(
           backgroundColor: Colors.purple[900],
           title: Container(
-            alignment: Alignment.center,
+            alignment: Alignment.centerLeft,
             child: Text("Lista de Postos",
                 style: TextStyle(
                   color: Colors.white,
@@ -61,6 +63,90 @@ class GasStation extends State<GasSationList> {
     setState(() {
       documents = firestoreDocuments.documents;
     });
+  }
+
+  findIcons(String fuel) {
+    switch (fuel) {
+      case 'Gasolina':
+        return Container(
+          margin: EdgeInsets.fromLTRB(0, 0, 8, 0),
+          child: CircleAvatar(
+            //minRadius: 1,
+            maxRadius: 15,
+            child: Text("G",
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 15,
+                  height: 1,
+                  fontWeight: FontWeight.w600,
+                )),
+            backgroundColor: Colors.black87,
+          ),
+        );
+      case 'Alcool':
+        return Container(
+          margin: EdgeInsets.fromLTRB(0, 0, 8, 0),
+          child: CircleAvatar(
+            //minRadius: 1,
+            maxRadius: 15,
+            child: Text("A",
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 15,
+                  height: 1,
+                  fontWeight: FontWeight.w600,
+                )),
+            backgroundColor: Colors.blue[900],
+          ),
+        );
+      case 'Diesel':
+        return Container(
+          margin: EdgeInsets.fromLTRB(0, 0, 8, 0),
+          child: CircleAvatar(
+            maxRadius: 15,
+            child: Text("D",
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 15,
+                  height: 1,
+                  fontWeight: FontWeight.w600,
+                )),
+            backgroundColor: Colors.orange,
+          ),
+        );
+      case 'Gasolina Aditivada':
+        return Container(
+          margin: EdgeInsets.fromLTRB(0, 0, 8, 0),
+          child: CircleAvatar(
+            //minRadius: 1,
+            maxRadius: 15,
+            child: Text("G+",
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 15,
+                  height: 1,
+                  fontWeight: FontWeight.w600,
+                )),
+            backgroundColor: Colors.red[900],
+          ),
+        );
+      default:
+        return Container(
+          margin: EdgeInsets.fromLTRB(0, 0, 8, 0),
+          child: CircleAvatar(
+            //minRadius: 1,
+            maxRadius: 10,
+            child: Text("N",
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 15,
+                  height: 1,
+                  fontWeight: FontWeight.w600,
+                )),
+            backgroundColor: Colors.grey,
+          ),
+        );
+    }
   }
 
   getNearbyPlaces() async {
@@ -91,19 +177,43 @@ class GasStation extends State<GasSationList> {
     });
   }
 
+  calculateDistance(LatLng origin, LatLng destination) async {
+    double distanceInMeters = await Geolocator().distanceBetween(
+      origin.latitude,
+      origin.longitude,
+      destination.latitude,
+      destination.longitude,
+    );
+
+    var formatedDistance = distanceInMeters.toString();
+
+    if (distanceInMeters > 1000) {
+      var kilometragem = distanceInMeters / 1000;
+      formatedDistance = kilometragem.toStringAsFixed(2) + "Km";
+    } else {
+      formatedDistance = distanceInMeters.toStringAsFixed(2) + " metros";
+    }
+    return formatedDistance;
+  }
+
   ListView buildPlacesList() {
     final placesWidget = places.map((f) {
       List<Widget> list = [];
       List<Widget> listPadding = [
         Padding(
-          padding: EdgeInsets.only(bottom: 4.0),
-          child: Text(
-            f.name,
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        )
+            padding: EdgeInsets.only(bottom: 4.0),
+            child: Row(children: [
+              Icon(FontAwesomeIcons.gasPump, color: Colors.green),
+              SizedBox(width: 10),
+              Flexible(
+                child: Text(
+                  f.name,
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              )
+            ]))
       ];
 
       if (f.formattedAddress != null) {
@@ -112,26 +222,29 @@ class GasStation extends State<GasSationList> {
             child: Padding(
                 padding: EdgeInsets.only(bottom: 2.0),
                 child: Flexible(
-                  child: Text(
-                    f.formattedAddress,
-                    style: Theme.of(context).textTheme.bodyText2,
-                  ),
-                )),
+                    child: Row(children: [
+                  SizedBox(width: 35),
+                  Flexible(
+                    child: Text(
+                      f.formattedAddress,
+                      style: Theme.of(context).textTheme.caption,
+                    ),
+                  )
+                ]))),
           ),
         );
       }
 
-      if (f.vicinity != null) {
-        listPadding.add(Flexible(
-          child: Padding(
-            padding: EdgeInsets.only(bottom: 2.0),
-            child: Text(
-              f.types.join(','),
-              style: Theme.of(context).textTheme.caption,
-            ),
-          ),
-        ));
-      }
+      listPadding.add(Flexible(
+        child: Row(children: [
+          SizedBox(width: 35),
+          Icon(Icons.star, color: Colors.amber, size: 16),
+          Icon(Icons.star, color: Colors.amber, size: 16),
+          Icon(Icons.star, color: Colors.amber, size: 16),
+          Icon(Icons.star, color: Colors.amber, size: 16),
+          Icon(Icons.star_border, color: Colors.grey, size: 16),
+        ]),
+      ));
 
       documents.forEach((element) {
         if (element.data["placeId"] == f.placeId) {
@@ -150,9 +263,13 @@ class GasStation extends State<GasSationList> {
                 Flexible(
                   child: Padding(
                     padding: EdgeInsets.only(bottom: 2.0),
-                    child: Text(
-                      "${item.key} = R\$ ${item.value}",
-                      style: Theme.of(context).textTheme.subtitle2,
+                    child: Row(
+                      children: [
+                        findIcons("${item.key}"),
+                        SizedBox(width: 5),
+                        Text("${item.key} = R\$ ${item.value}",
+                            style: Theme.of(context).textTheme.subtitle2)
+                      ],
                     ),
                   ),
                 )
@@ -168,8 +285,6 @@ class GasStation extends State<GasSationList> {
               child: Container(
             padding: EdgeInsets.all(4.0),
             child: Row(children: [
-              Image.network(f.icon, width: 25, color: Colors.green),
-              SizedBox(width: 11),
               Flexible(
                 child: Wrap(
                   children: listPadding,

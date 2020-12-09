@@ -16,14 +16,14 @@ import 'dart:math' show cos, sqrt, asin;
 const apiKey = "AIzaSyBuTlwdWzZXm140ULb3DhocI9znsll8sog";
 GoogleMapsPlaces _places = GoogleMapsPlaces(apiKey: apiKey);
 
-class Map extends StatefulWidget {
+class MapPage extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
     return MapLocation();
   }
 }
 
-class MapLocation extends State<Map> {
+class MapLocation extends State<MapPage> {
   Completer<GoogleMapController> _controller = Completer();
   final homeScaffoldKey = GlobalKey<ScaffoldState>();
   GoogleMapController mapController;
@@ -434,14 +434,20 @@ class MapLocation extends State<Map> {
 
           MarkerId markerId = MarkerId("${place.name}");
           Marker marker = Marker(
-              markerId: markerId,
-              icon: destinationIcon,
-              position: LatLng(
-                  place.geometry.location.lat, place.geometry.location.lng),
-              //onTap: () => showFuelPricePage(place
-              //.placeId));
-              onTap: () =>
-                  _configurandoModalBottomSheet(context, center, place));
+            markerId: markerId,
+            icon: destinationIcon,
+            position: LatLng(
+                place.geometry.location.lat, place.geometry.location.lng),
+            //onTap: () => showFuelPricePage(place
+            //.placeId));
+
+            onDragEnd: (LatLng position) =>
+                {_configurandoModalBottomSheet(context, center, place)},
+            onTap: () => {
+              createRouteCoordinates(context, center, place),
+            },
+          );
+
           //onTap: () => showConfirmationDialog(context, center, place));
 
           markers.add(marker);
