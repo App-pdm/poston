@@ -61,20 +61,20 @@ class _StartPage extends State<StartPage> {
           BottomNavigationBarItem(
               icon: Icon(
                 Icons.home_outlined,
-                size: 35,
+                size: 30,
               ),
               label: 'Início'),
           BottomNavigationBarItem(
             icon: Icon(
               Icons.map_outlined,
-              size: 35,
+              size: 30,
             ),
             label: 'Mapa',
           ),
           BottomNavigationBarItem(
             icon: Icon(
               Icons.person_outline,
-              size: 35,
+              size: 30,
             ),
             label: 'Perfil',
           ),

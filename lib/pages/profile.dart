@@ -63,8 +63,11 @@ class ProfilePage extends StatelessWidget {
                                 height: 64,
                                 width: 64,
                                 decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    color: Color(0xFF9B9B9B)),
+                                  shape: BoxShape.circle,
+                                  image: DecorationImage(
+                                    image: AssetImage('assets/images/user.jpg'),
+                                  ),
+                                ),
                               ),
                   ),
                   Container(

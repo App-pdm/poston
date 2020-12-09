@@ -110,8 +110,11 @@ class SignupPage extends StatelessWidget {
                       var userCredential = await FirebaseAuth.instance
                           .createUserWithEmailAndPassword(
                               email: _email, password: _password);
-                      _nome = userCredential.user.displayName;
-                      Navigator.of(context).pushReplacementNamed('/map');
+
+                      var user = await FirebaseAuth.instance.currentUser();
+                      var userUpdate = UserUpdateInfo()..displayName = _nome;
+                      await user.updateProfile(userUpdate);
+                      Navigator.of(context).pushReplacementNamed('/start');
                     } on AuthException catch (e) {
                       if (e.code == "weak-password") {
                         print('The password provied is too weak.');

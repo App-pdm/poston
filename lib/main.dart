@@ -35,7 +35,7 @@ class PostOn extends StatelessWidget {
           visualDensity: VisualDensity.adaptivePlatformDensity,
           fontFamily: "Metropolis"),
       routes: routes,
-      initialRoute: '/map',
+      initialRoute: '/',
     );
   }
 }
