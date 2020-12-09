@@ -16,7 +16,7 @@ class _StartPage extends State<StartPage> {
     Container(
       color: Colors.black,
     ),
-    Map(),
+    MapPage(),
     ProfilePage(),
   ];
 

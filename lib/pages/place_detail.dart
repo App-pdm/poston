@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:poston/models/fuel.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 const kGoogleApiKey = "AIzaSyBuTlwdWzZXm140ULb3DhocI9znsll8sog";
 GoogleMapsPlaces _places = GoogleMapsPlaces(apiKey: kGoogleApiKey);
@@ -91,10 +92,24 @@ class PlaceDetailState extends State<PlaceDetailWidget> {
               initialCameraPosition: CameraPosition(target: center, zoom: 15.0),
             ),
           )),
-          Expanded(
-            child: buildPlaceDetailList(placeDetail),
+          Row(
+            children: [
+              Expanded(
+                child: buildPlaceDetailList(placeDetail),
+              ),
+            ],
           ),
-          Expanded(child: buildFuelList())
+          SizedBox(
+            height: 20,
+          ),
+          Flexible(
+            child: Row(children: [
+              Padding(
+                padding: EdgeInsets.only(left: 20),
+              ),
+              Expanded(child: buildFuelList())
+            ]),
+          )
         ],
       );
     }
@@ -173,11 +188,17 @@ class PlaceDetailState extends State<PlaceDetailWidget> {
           element.value != null &&
           element.key != "placeId") {
         if (price == false) {
-          list.add(Text("Preços: "));
+          list.add(Row(
+            children: [SizedBox(height: 30), Text("Preços: ")],
+          ));
           price = true;
         }
-        list.add(Text(
-            "${element.key.toString()} = R\$ ${element.value.toString()}"));
+        list.add(Row(
+          children: [
+            findIcons("${element.key.toString()}"),
+            Text("${element.key.toString()} = R\$ ${element.value.toString()}"),
+          ],
+        ));
       }
     });
 
@@ -185,6 +206,90 @@ class PlaceDetailState extends State<PlaceDetailWidget> {
       shrinkWrap: true,
       children: list,
     );
+  }
+
+  findIcons(String fuel) {
+    switch (fuel) {
+      case 'Gasolina':
+        return Container(
+          margin: EdgeInsets.fromLTRB(0, 0, 8, 0),
+          child: CircleAvatar(
+            //minRadius: 1,
+            maxRadius: 15,
+            child: Text("G",
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 15,
+                  height: 1,
+                  fontWeight: FontWeight.w600,
+                )),
+            backgroundColor: Colors.black87,
+          ),
+        );
+      case 'Alcool':
+        return Container(
+          margin: EdgeInsets.fromLTRB(0, 0, 8, 0),
+          child: CircleAvatar(
+            //minRadius: 1,
+            maxRadius: 15,
+            child: Text("A",
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 15,
+                  height: 1,
+                  fontWeight: FontWeight.w600,
+                )),
+            backgroundColor: Colors.blue[900],
+          ),
+        );
+      case 'Diesel':
+        return Container(
+          margin: EdgeInsets.fromLTRB(0, 0, 8, 0),
+          child: CircleAvatar(
+            maxRadius: 15,
+            child: Text("D",
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 15,
+                  height: 1,
+                  fontWeight: FontWeight.w600,
+                )),
+            backgroundColor: Colors.orange,
+          ),
+        );
+      case 'Gasolina Aditivada':
+        return Container(
+          margin: EdgeInsets.fromLTRB(0, 0, 8, 0),
+          child: CircleAvatar(
+            //minRadius: 1,
+            maxRadius: 15,
+            child: Text("G+",
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 15,
+                  height: 1,
+                  fontWeight: FontWeight.w600,
+                )),
+            backgroundColor: Colors.red[900],
+          ),
+        );
+      default:
+        return Container(
+          margin: EdgeInsets.fromLTRB(0, 0, 8, 0),
+          child: CircleAvatar(
+            //minRadius: 1,
+            maxRadius: 10,
+            child: Text("N",
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 15,
+                  height: 1,
+                  fontWeight: FontWeight.w600,
+                )),
+            backgroundColor: Colors.grey,
+          ),
+        );
+    }
   }
 
   ListView buildPlaceDetailList(PlaceDetails placeDetail) {
@@ -207,48 +312,64 @@ class PlaceDetailState extends State<PlaceDetailWidget> {
               })));
     }
 
-    list.add(
-      Padding(
-          padding:
-              EdgeInsets.only(top: 4.0, left: 8.0, right: 8.0, bottom: 4.0),
-          child: Text(
-            placeDetail.name,
-          )),
-    );
+    list.add(Padding(
+      padding: EdgeInsets.only(top: 20.0, left: 20.0, right: 8.0, bottom: 4.0),
+      child: Row(children: [
+        Icon(FontAwesomeIcons.gasPump, color: Colors.green),
+        SizedBox(
+          width: 10,
+        ),
+        Text(
+          placeDetail.name,
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ]),
+    ));
 
     if (placeDetail.formattedAddress != null) {
       list.add(
         Padding(
             padding:
-                EdgeInsets.only(top: 4.0, left: 8.0, right: 8.0, bottom: 4.0),
-            child: Text(
-              placeDetail.formattedAddress,
-            )),
+                EdgeInsets.only(top: 4.0, left: 55.0, right: 8.0, bottom: 4.0),
+            child: Flexible(
+                child: Row(children: [
+              Flexible(
+                child: Text(
+                  placeDetail.formattedAddress,
+                  style: Theme.of(context).textTheme.caption,
+                ),
+              )
+            ]))),
       );
     }
 
-    if (placeDetail.types?.first != null) {
-      list.add(
-        Padding(
-            padding:
-                EdgeInsets.only(top: 4.0, left: 8.0, right: 8.0, bottom: 0.0),
-            child: Text(
-              placeDetail.types.first.toUpperCase(),
-              style: Theme.of(context).textTheme.caption,
-            )),
-      );
-    }
+    list.add(Flexible(
+      child: Row(children: [
+        SizedBox(width: 55),
+        Icon(Icons.star, color: Colors.amber, size: 16),
+        Icon(Icons.star, color: Colors.amber, size: 16),
+        Icon(Icons.star, color: Colors.amber, size: 16),
+        Icon(Icons.star, color: Colors.amber, size: 16),
+        Icon(Icons.star_border, color: Colors.grey, size: 16),
+      ]),
+    ));
 
     if (placeDetail.formattedPhoneNumber != null) {
-      list.add(
-        Padding(
-            padding:
-                EdgeInsets.only(top: 4.0, left: 8.0, right: 8.0, bottom: 4.0),
-            child: Text(
+      list.add(Padding(
+          padding:
+              EdgeInsets.only(top: 4.0, left: 20.0, right: 8.0, bottom: 4.0),
+          child: Row(children: [
+            Icon(FontAwesomeIcons.phone, color: Colors.blue),
+            SizedBox(
+              width: 10,
+            ),
+            Text(
               "Telefone: ${placeDetail.formattedPhoneNumber}",
               style: Theme.of(context).textTheme.button,
-            )),
-      );
+            )
+          ])));
     }
 
     if (placeDetail.openingHours != null) {
@@ -277,18 +398,6 @@ class PlaceDetailState extends State<PlaceDetailWidget> {
                 EdgeInsets.only(top: 0.0, left: 8.0, right: 8.0, bottom: 4.0),
             child: Text(
               placeDetail.website,
-              style: Theme.of(context).textTheme.caption,
-            )),
-      );
-    }
-
-    if (placeDetail.rating != null) {
-      list.add(
-        Padding(
-            padding:
-                EdgeInsets.only(top: 0.0, left: 8.0, right: 8.0, bottom: 4.0),
-            child: Text(
-              "Rating: ${placeDetail.rating}",
               style: Theme.of(context).textTheme.caption,
             )),
       );
