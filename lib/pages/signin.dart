@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:poston/models/sign_in.dart';
 import 'package:poston/widgets/containertext.dart';
+import 'package:poston/widgets/validator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class SigninPage extends StatelessWidget {
@@ -49,13 +50,14 @@ class SigninPage extends StatelessWidget {
                         text: 'Email',
                         keyboardType: TextInputType.emailAddress,
                         obscureText: false,
+                        validator: Validator().emailValidate,
                         onSaved: (value) => _email = value,
-                        onChanged: (value) => _email = value,
                       ),
                       CustomContainer(
                         text: 'Senha',
                         keyboardType: TextInputType.visiblePassword,
                         obscureText: true,
+                        validator: Validator().validatePassword,
                         onSaved: (value) => _password = value,
                         onChanged: (value) => _password = value,
                       ),
@@ -92,20 +94,21 @@ class SigninPage extends StatelessWidget {
                 ),
                 GestureDetector(
                   onTap: () async {
-                    _formKey.currentState.save();
-                    try {
-                      var userCredential = await FirebaseAuth.instance
-                          .signInWithEmailAndPassword(
-                              email: _email, password: _password);
-                      Navigator.of(context).pushReplacementNamed('/start');
-                    } on AuthException catch (e) {
-                      if (e.code == "weak-password") {
-                        print('The password provied is too weak.');
-                      } else if (e.code == 'email-already-in-use') {
-                        print('The account already exists for that email.');
+                    if (_formKey.currentState.validate()) {
+                      try {
+                        _formKey.currentState.save();
+                        await FirebaseAuth.instance.signInWithEmailAndPassword(
+                            email: _email, password: _password);
+                        Navigator.of(context).pushReplacementNamed('/start');
+                      } on AuthException catch (e) {
+                        if (e.code == "weak-password") {
+                          print('The password provied is too weak.');
+                        } else if (e.code == 'email-already-in-use') {
+                          print('The account already exists for that email.');
+                        }
+                      } catch (e) {
+                        print(e);
                       }
-                    } catch (e) {
-                      print(e);
                     }
                   },
                   child: Container(

@@ -54,6 +54,8 @@ class CustomContainer extends StatelessWidget {
               fontWeight: FontWeight.w500,
               height: 1.4285,
             ),
+            errorBorder: InputBorder.none,
+            errorStyle: TextStyle(),
             border: InputBorder.none,
           ),
           onSaved: onSaved,

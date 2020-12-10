@@ -147,45 +147,266 @@ class MapLocation extends State<MapPage> {
   void _configurandoModalBottomSheet(
       context, LatLng center, PlacesSearchResult place) {
     showModalBottomSheet(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(34),
+            topRight: Radius.circular(34),
+          ),
+        ),
+        isScrollControlled: true,
         context: context,
-        builder: (BuildContext bc) {
+        builder: (context) {
           return Container(
-            margin: EdgeInsets.only(top: 20),
+            margin: EdgeInsets.only(bottom: 36),
+            height: 375,
+            decoration: BoxDecoration(
+              color: Color(0xFFF9F9F9),
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(34),
+                topRight: Radius.circular(34),
+              ),
+              boxShadow: [
+                BoxShadow(
+                  offset: Offset(0, -4),
+                  color: Color.fromRGBO(249, 249, 249, 0.08),
+                ),
+              ],
+            ),
             child: Wrap(
               children: <Widget>[
                 Row(children: [
-                  Text(
-                    place.name,
-                    textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 36, bottom: 18),
+                    child: Text(
+                      place.name,
+                      textAlign: TextAlign.center,
+                      style:
+                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    ),
                   ),
                 ], mainAxisAlignment: MainAxisAlignment.center),
                 SizedBox(
                   height: 20,
                 ),
-                ListTile(
-                    leading: new Icon(FontAwesomeIcons.moneyBill,
-                        color: Colors.green),
-                    title: new Text('Informar Preço'),
-                    onTap: () => showFuelPricePage(place.placeId)),
-                ListTile(
-                  leading:
-                      new Icon(FontAwesomeIcons.route, color: Colors.green),
-                  title: new Text('Traçar Rota'),
-                  onTap: () => {createRouteCoordinates(context, center, place)},
+                GestureDetector(
+                  onTap: () async => showFuelPricePage(place.placeId),
+                  child: Container(
+                    width: double.infinity,
+                    height: 72,
+                    padding: EdgeInsets.fromLTRB(15, 18, 8, 0),
+                    // decoration: BoxDecoration(
+                    //   border: Border.all(),
+                    // ),
+                    child: Row(
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Informar Preço',
+                              style: TextStyle(
+                                fontFamily: 'Metropolis',
+                                fontSize: 18,
+                                height: 1.222,
+                                fontWeight: FontWeight.bold,
+                                color: Color(0xFF222222),
+                              ),
+                            ),
+                            Text(
+                              'Clique para informar o preço do combustível.',
+                              style: TextStyle(
+                                fontFamily: 'Metropolis',
+                                fontSize: 14,
+                                height: 1.428,
+                                fontWeight: FontWeight.w500,
+                                color: Color(0xFF9B9B9B),
+                              ),
+                            )
+                          ],
+                        ),
+                        Container(
+                          margin: EdgeInsets.only(left: 53, top: 5),
+                          child: Column(
+                            children: [
+                              Icon(
+                                Icons.arrow_forward_ios_rounded,
+                                color: Color(0xFF9B9B9B),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
-                ListTile(
-                  leading:
-                      new Icon(FontAwesomeIcons.camera, color: Colors.green),
-                  title: new Text('Tirar Foto'),
-                  onTap: () => {getFuelPrice()},
+                Divider(
+                  color: Color.fromRGBO(000, 000, 000, 0.1),
+                  height: 1,
                 ),
-                ListTile(
-                  leading: new Icon(FontAwesomeIcons.info, color: Colors.green),
-                  title: new Text('Ver Detalhes'),
-                  onTap: () {
-                    showPlaceDetails(place.placeId);
-                  },
+                GestureDetector(
+                  onTap: () => createRouteCoordinates(context, center, place),
+                  child: Container(
+                    width: double.infinity,
+                    height: 72,
+                    padding: EdgeInsets.fromLTRB(15, 18, 8, 0),
+                    // decoration: BoxDecoration(
+                    //   border: Border.all(),
+                    // ),
+                    child: Row(
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Traçar Rota',
+                              style: TextStyle(
+                                fontFamily: 'Metropolis',
+                                fontSize: 18,
+                                height: 1.222,
+                                fontWeight: FontWeight.bold,
+                                color: Color(0xFF222222),
+                              ),
+                            ),
+                            Text(
+                              'Clique para traçar a rota deste posto.',
+                              style: TextStyle(
+                                fontFamily: 'Metropolis',
+                                fontSize: 14,
+                                height: 1.428,
+                                fontWeight: FontWeight.w500,
+                                color: Color(0xFF9B9B9B),
+                              ),
+                            )
+                          ],
+                        ),
+                        Container(
+                          margin: EdgeInsets.only(left: 106, top: 5),
+                          child: Column(
+                            children: [
+                              Icon(
+                                Icons.arrow_forward_ios_rounded,
+                                color: Color(0xFF9B9B9B),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                Divider(
+                  color: Color.fromRGBO(000, 000, 000, 0.1),
+                  height: 1,
+                ),
+                GestureDetector(
+                  onTap: () => getFuelPrice(),
+                  child: Container(
+                    width: double.infinity,
+                    height: 72,
+                    padding: EdgeInsets.fromLTRB(15, 18, 8, 0),
+                    // decoration: BoxDecoration(
+                    //   border: Border.all(),
+                    // ),
+                    child: Row(
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Tirar Foto',
+                              style: TextStyle(
+                                fontFamily: 'Metropolis',
+                                fontSize: 18,
+                                height: 1.222,
+                                fontWeight: FontWeight.bold,
+                                color: Color(0xFF222222),
+                              ),
+                            ),
+                            Text(
+                              'Tire uma foto da placa de preços.',
+                              style: TextStyle(
+                                fontFamily: 'Metropolis',
+                                fontSize: 14,
+                                height: 1.428,
+                                fontWeight: FontWeight.w500,
+                                color: Color(0xFF9B9B9B),
+                              ),
+                            )
+                          ],
+                        ),
+                        Container(
+                          margin: EdgeInsets.only(left: 132, top: 5),
+                          child: Column(
+                            children: [
+                              Icon(
+                                Icons.arrow_forward_ios_rounded,
+                                color: Color(0xFF9B9B9B),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                Divider(
+                  color: Color.fromRGBO(000, 000, 000, 0.1),
+                  height: 1,
+                ),
+                GestureDetector(
+                  onTap: () => showPlaceDetails(place.placeId),
+                  child: Container(
+                    width: double.infinity,
+                    height: 72,
+                    padding: EdgeInsets.fromLTRB(15, 18, 8, 0),
+                    // decoration: BoxDecoration(
+                    //   border: Border.all(),
+                    // ),
+                    child: Row(
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Ver Detalhes',
+                              style: TextStyle(
+                                fontFamily: 'Metropolis',
+                                fontSize: 18,
+                                height: 1.222,
+                                fontWeight: FontWeight.bold,
+                                color: Color(0xFF222222),
+                              ),
+                            ),
+                            Text(
+                              'Clique ver detalhes deste posto.',
+                              style: TextStyle(
+                                fontFamily: 'Metropolis',
+                                fontSize: 14,
+                                height: 1.428,
+                                fontWeight: FontWeight.w500,
+                                color: Color(0xFF9B9B9B),
+                              ),
+                            )
+                          ],
+                        ),
+                        Container(
+                          margin: EdgeInsets.only(left: 141, top: 5),
+                          child: Column(
+                            children: [
+                              Icon(
+                                Icons.arrow_forward_ios_rounded,
+                                color: Color(0xFF9B9B9B),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                Divider(
+                  color: Color.fromRGBO(000, 000, 000, 0.1),
+                  height: 1,
                 ),
               ],
             ),
